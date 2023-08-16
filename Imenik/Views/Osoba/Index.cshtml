@@ -1,0 +1,298 @@
+﻿@model List<Osoba>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Imenik</title>
+    <link href="~/css/site.css" rel="stylesheet"> 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+    .male {
+    width: 20px;
+    height: 20px;
+    background-color: blue;
+    border-radius: 50%;
+    display: inline-block;
+    }
+
+    .female {
+    width: 20px;
+    height: 20px;
+    background-color: red;
+    border-radius: 50%;
+    display: inline-block;
+    }
+    .promt {
+        display: none;
+    }
+   </style>
+</head>
+<body>
+<table class="table">
+    <thead>
+    <tr>
+        <th>Ime</th>
+        <th>Prezime</th>
+        <th>Broj telefona</th>
+        <th>Pol</th>
+        <th>Email</th>
+        <th>Grad</th>
+        <th>Država</th>
+        <th>Datum rodenja</th>
+        <th>Starost</th>
+        <th>Opcije</th>
+    </tr>
+    </thead>
+    <tbody>
+    @if (Model != null)
+    {
+        @foreach (var osoba in Model)
+        {
+            <tr>
+                <td>@osoba.Ime</td>
+                <td>@osoba.Prezime</td>
+                <td>@osoba.BrojTelefona</td>
+                <td>
+                    @if (osoba.Pol == "Musko")
+                    {
+                        <div class="male"></div>
+                    }
+                    else if (osoba.Pol == "Zensko")
+                    {
+                        <div class="female"></div>
+                    }
+                </td>
+                <td>@osoba.Email</td>
+                <td>@osoba.Grad.Naziv</td>
+                <td>@osoba.Drzava.Naziv</td>
+                <td>@osoba.DatumRodjenja</td>
+                <td>@osoba.Starost</td>
+                <td>
+                            <button class="btn btn-primary" onclick="openEditDialog(@osoba)">Izmeni</button>
+                    <button onclick="deletePerson(@osoba.Id)">Obrisi</button>
+                </td>
+            </tr>
+        }
+    }
+    </tbody>
+</table>
+
+    <button class="btn btn-primary"  onclick="openAddDialog()">Dodaj osobu</button>
+    
+<div class="promt">
+        <div class="modal fade"  id="osobaModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-body">
+                <div class="modal-header">
+                    <h5 class="modal-title">Dodaj/Izmjeni osobu</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="osobaForm">
+                        <div class="form-group">
+                            <label for="ime">Ime:</label>
+                            <input type="text" class="form-control" id="ime" maxlength="50" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="prezime">Prezime:</label>
+                            <input type="text" class="form-control" id="prezime" maxlength="50" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="brojTelefona">Broj telefona:</label>
+                            <input type="tel" class="form-control" id="brojTelefona" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required>
+                            <small>Format: 123-456-7890</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="email" class="form-control" id="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="drzava">Država:</label>
+                            <select class="form-control" id="drzava" required>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="grad">Grad:</label>
+                            <select class="form-control" id="grad" disabled required>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="pol">Pol:</label>
+                            <select class="form-control" id="pol" required>
+                                <option value="M">Muški</option>
+                                <option value="Ž">Ženski</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="datumRodjenja">Datum rođenja:</label>
+                            <input type="date" class="form-control" id="datumRodjenja" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="starost">Starost:</label>
+                            <input type="number" class="form-control" id="starost" min="0" max="120" required>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="saveButton">Dodaj/Izmeni</button>
+                    <button type="button" onclick="hidePromt()" class="btn btn-primary" data-dismiss="modal">Zatvori</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+        function openAddDialog() {
+            $('#ime').val('');
+            $('#prezime').val('');
+            $('#brojTelefona').val('');
+            $('#email').val('');
+            $('#drzava').val(''); 
+            $('#grad').val('');   
+            $('#pol').val('');   
+            $('#datumRodjenja').val(''); 
+            $('#starost').val('');      
+            $('#osobaModal').modal('show');
+        }
+        function openAddDialog() {
+            $('#ime').val('');
+            $('#prezime').val('');
+            $('#brojTelefona').val('');
+            $('#email').val('');
+            $('#drzava').val('');
+            $('#grad').val('');   
+            $('#pol').val(''); 
+            $('#datumRodjenja').val(''); 
+            $('#starost').val('');   
+            $('#osobaModal').modal('show');
+        }
+        function loadCities() {
+            var drzavaId = $('#drzava').val();
+            if (drzavaId) {
+                $.ajax({
+                    url: '/Grad/GradoviZaDrzavu/' + drzavaId,
+                    type: 'GET',
+                    success: function (gradovi) {
+                        var gradDropdown = $('#grad');
+                        gradDropdown.empty();
+                        gradDropdown.prop('disabled', false);
+                        gradovi.forEach(function (grad) {
+                            gradDropdown.append($('<option>', {
+                                value: grad.Id,
+                                text: grad.Naziv
+                            }));
+                        });
+                    }
+                });
+            } else {
+                $('#grad').prop('disabled', true);
+            }
+        }
+        function validateForm() {
+            var isValid = true;
+            $('#osobaForm input, #osobaForm select').each(function () {
+                if ($(this).prop('required') && !$(this).val()) {
+                    isValid = false;
+                    return false;
+                }
+            });
+            return isValid;
+        }
+        function loadCountries() {
+            $.ajax({
+                url: '/Drzava/SveDrzave',
+                type: 'GET',
+                success: function (drzave) {
+                    var drzavaDropdown = $('#drzava');
+                    drzave.forEach(function (drzava) {
+                        drzavaDropdown.append($('<option>', {
+                            value: drzava.Id,
+                            text: drzava.Naziv
+                        }));
+                    });
+                }
+            });
+        }
+        function deletePerson(osobaId) {
+            var isConfirmed = confirm("Da li ste sigurni da želite da izbrišete " + osobaId + "?");
+            if (isConfirmed) {
+                $.ajax({
+                    url: '/Osoba/Delete/' + osobaId,
+                    type: 'POST',
+                    success: function () {
+                        location.reload();
+                    }
+                });
+            }
+        }
+        function savePerson() {
+            var isAddMode = $('#osobaId').val() === ""; 
+            var url = isAddMode ? '/Osoba/Dodaj' : '/Osoba/Izmijeni/' + $('#osobaId').val();
+            var starost = calculateAge();
+            var data = {
+                Id: $('#osobaId').val(),
+                Ime: $('#ime').val(),
+                Prezime: $('#prezime').val(),
+                BrojTelefona: $('#brojTelefona').val(),
+                Pol: $('#pol').val(),
+                Email: $('#email').val(),
+                GradId: $('#gradId').val(),
+                DrzavaId: $('#drzavaId').val(),
+                DatumRodjenja: $('#datumRodjenja').val(),
+                Starost: starost
+            };
+
+            if (!validateForm()) {
+                return;
+            }
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        // Osvežavanje tabele ili dodavanje/izmena reda
+                        location.reload();
+                    } else {
+                        alert('Došlo je do greške: ' + result.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Došlo je do greške:', error);
+                });
+            hidePromt();
+
+        }
+        function hidePromt() {
+            $('#osobaModal').modal('hide');
+        }
+
+        function calculateAge() {
+  var dob = $('#datumRodjenja').val(); 
+  var dobDate = new Date(dob); 
+  var today = new Date(); 
+  var age = today.getFullYear() - dobDate.getFullYear();
+  var monthDifference = today.getMonth() - dobDate.getMonth(); 
+  if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < dobDate.getDate())) {
+    age--;
+  }
+        }
+        document.getElementById('saveButton').addEventListener('click', savePerson);
+
+
+</script>
+</body>
+</html>

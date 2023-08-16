@@ -1,0 +1,39 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+
+.male {
+    width: 20px;
+    height: 20px;
+    background-color: blue;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+
+.female {
+    width: 20px;
+    height: 20px;
+    background-color: red;
+    border-radius: 50%;
+    display: inline-block;
+}
+.promt {
+    display: none;
+}
